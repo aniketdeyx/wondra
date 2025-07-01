@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  eslint: {
+    ignoreDuringBuilds: false, // Keep ESLint checking enabled
+    dirs: ['app', 'components', 'lib'], // Only check these directories
+  },
+  typescript: {
+    ignoreBuildErrors: false, // Keep TypeScript checking enabled
+  },
 };
 
 export default nextConfig;
