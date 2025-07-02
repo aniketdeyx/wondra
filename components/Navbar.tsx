@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import AuthModal from "./AuthModal";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import {LogOutIcon} from "lucide-react"
 
-export default function Navbar() {
+export default function Navbar({session} : {session: Session | null}) {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     return (
@@ -18,28 +21,43 @@ export default function Navbar() {
                     </span>
                 </Link>
 
-                {/* Navigation Links */}
-                <div className="hidden md:flex items-center space-x-8 text-gray-700 hover:text-[#3a5a40] text-sm font-bold transition-colors duration-200">
-                    <Link href="/trips" className="">
-                        My Trips
-                    </Link>
-                    <Link href="/globe" className="">
-                        Globe
-                    </Link>
-                    
-                </div>
+                {/* Navigation Links - Only show when logged in */}
+                {session && (
+                    <div className="hidden md:flex items-center space-x-8 text-gray-700 hover:text-[#3a5a40] text-sm font-bold transition-colors duration-200">
+                        <Link href="/trips" className="hover:text-[#3a5a40] transition-colors">
+                            My Trips
+                        </Link>
+                        <Link href="/globe" className="hover:text-[#3a5a40] transition-colors">
+                            Globe
+                        </Link>
+                    </div>
+                )}
 
                 <div className="hidden md:flex items-center space-x-4">
-                    <button 
-                        onClick={() => setIsAuthModalOpen(true)}
-                        className="bg-[#3a5a40] text-white text-sm px-4 py-2 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
-                    >
-                        Sign in
-                    </button>
+                    {session ? (
+                        // Show user info and logout when logged in
+                        <div className="flex items-center space-x-3">
+                            <button 
+                                onClick={() => signOut()}
+                                className="bg-red-700 cursor-pointer text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-red-600 hover:shadow-lg hover:scale-105 transition-all duration-200"
+                            >
+                                Logout
+                                <LogOutIcon className="inline-block ml-2 w-4 h-4" />
+                            </button>
+                        </div>
+                    ) : (
+                        // Show sign in button when not logged in
+                        <button 
+                            onClick={() => setIsAuthModalOpen(true)}
+                            className="bg-[#3a5a40] cursor-pointer text-white text-sm px-4 py-2 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
+                        >
+                            Sign in
+                        </button>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
-                <button className="md:hidden px-2 text-gray-700 hover:text-blue-600 transition-colors">
+                <button className="md:hidden px-2 text-gray-700 hover:text-[#3a5a40] transition-colors">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -47,10 +65,13 @@ export default function Navbar() {
             </div>
         </nav>
 
-        <AuthModal 
-            isOpen={isAuthModalOpen} 
-            onClose={() => setIsAuthModalOpen(false)} 
-        />
+        {/* Only show AuthModal when not logged in */}
+        {!session && (
+            <AuthModal 
+                isOpen={isAuthModalOpen} 
+                onClose={() => setIsAuthModalOpen(false)} 
+            />
+        )}
         </>
     );
 }
