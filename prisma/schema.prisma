@@ -52,6 +52,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  trips         Trip[]
  
   @@map("users")
 }
@@ -63,4 +64,17 @@ model VerificationToken {
  
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model Trip {
+  id          String   @id @default(cuid())
+  description String
+  title       String
+  startDate   DateTime 
+  imageUrl    String?
+  endDate     DateTime 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   
+  user        User     @relation(fields: [userId], references: [id])
 }
