@@ -1,11 +1,14 @@
 "use client"
 
 import { createTrip } from "@/lib/actions/create-trip";
-import { useTransition } from "react";
+import { UploadButton } from "@/lib/uploadthing";
+import Image from "next/image";
+import { useState, useTransition } from "react";
 
 export default function NewTripPage() {
 
     const [isPending, startTransition] = useTransition();
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     
     return (
         <div className="min-h-screen bg-gray-100 py-8">
@@ -14,6 +17,9 @@ export default function NewTripPage() {
                 
                 <form  className="bg-white rounded-lg shadow-lg p-8" 
                     action={(formData: FormData) => {
+                        if(imageUrl) {
+                            formData.append('imageUrl', imageUrl);
+                        }
                         startTransition(() => {
                             createTrip(formData)
                         })
@@ -81,6 +87,31 @@ export default function NewTripPage() {
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a5a40] focus:border-transparent resize-none"
                                 placeholder="Describe your trip..."
                             />
+                        </div>
+                        <div>
+                        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                            Trip Image
+                        </label>
+                        {imageUrl && (
+                            <Image
+                                src={imageUrl}
+                                alt="Trip Image"
+                                width={500}
+                                height={300}
+                                className="w-full h-auto rounded-lg mb-4 object-cover"  
+                            />
+                        )}
+                        <UploadButton
+                        endpoint={"imageUploader"}
+                        onClientUploadComplete={(res) => {
+                            if(res && res[0].ufsUrl) {
+                                setImageUrl(res[0].ufsUrl);
+                            }
+                        }}
+                        onUploadError={(error) => {
+                            console.error("Upload failed:", error);
+                        }}
+                        />
                         </div>
 
                         {/* Submit Button */}
