@@ -38,18 +38,18 @@ export default async function TripsPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Header Section */}
-            <div className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className=" shadow-sm ">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                         <div className="mb-4 sm:mb-0">
-                            <h1 className="text-3xl font-bold text-gray-900">My Trips</h1>
-                            <p className="text-gray-600 mt-1">
+                            <h1 className="text-2xl font-bold text-gray-900">My Trips</h1>
+                            <p className="text-gray-600  mt-1">
                                 {session?.user?.name ? `Welcome back, ${session.user.name}!` : 'Welcome back!'}
                             </p>
                         </div>
                         <Link href={"/trips/new"}>
-                            <button className="inline-flex items-center px-6 py-3 bg-[#3a5a40] text-white font-medium rounded-lg shadow-sm hover:bg-[#2d4633] hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3a5a40]">
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button className="inline-flex items-center px-3 py-3 bg-[#3a5a40] text-white font-medium rounded-lg shadow-sm hover:bg-[#588157] hover:shadow-lg transform hover:scale-105 transition-all duration-200 text-sm focus:outline-none focus:ring-2 cursor-pointer focus:ring-offset-2 focus:ring-[#3a5a40]">
+                                <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                 </svg>
                                 Add New Trip
@@ -87,13 +87,14 @@ export default async function TripsPage() {
                     <div>
                         <div className="mb-6">
                             <p className="text-gray-600">
-                                You have {trips.length} planned {trips.length > 1 ? 'trips' : 'trip'}.
-                                {upcomingTrips.length > 0 ? `Upcoming trips: ${upcomingTrips.length} upcoming` : ""}
+                                You have <span className="font-bold">{trips.length}</span> planned {trips.length > 1 ? 'trips' : 'trip'} and
+                                {upcomingTrips && (` ${upcomingTrips.length} upcoming trips`)}
                             </p>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {trips.map((trip) => (
+                                <Link href={`/trips/${trip.id}`} key={trip.id} className="no-underline">
                                 <div key={trip.id} className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
                                     <div className="p-6">
                                         <h3 className="text-lg font-semibold text-gray-900 mb-2">{trip.title}</h3>
@@ -114,14 +115,10 @@ export default async function TripsPage() {
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 Planning
                                             </span>
-                                            <Link href={`/trips/${trip.id}`}>
-                                                <button className="text-[#3a5a40] hover:text-[#2d4633] font-medium text-sm">
-                                                    View Details →
-                                                </button>
-                                            </Link>
                                         </div>
                                     </div>
                                 </div>
+                                </Link>
                             ))}
                         </div>
                     </div>

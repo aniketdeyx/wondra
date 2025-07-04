@@ -5,14 +5,15 @@ import { useState } from "react";
 import AuthModal from "./AuthModal";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import {LogOutIcon} from "lucide-react"
+import { LogOutIcon, X, Menu, User } from "lucide-react"
 
 export default function Navbar({session} : {session: Session | null}) {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
         <>
-            <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+            <nav className="bg-white backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
             <div className="mx-auto container flex justify-between items-center px-4 lg:px-8 py-3">
                 {/* Logo */}
                 <Link href='/' className="flex items-center space-x-2 group">
