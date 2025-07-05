@@ -17,6 +17,7 @@ import {
   Download,
   Star
 } from 'lucide-react'
+import Image from 'next/image'
 
 const TripDetailsPageClient = ({trip}:{trip: Trip}) => {
   const [isLiked, setIsLiked] = useState(false)
@@ -92,7 +93,7 @@ const TripDetailsPageClient = ({trip}:{trip: Trip}) => {
       <div className="relative">
         <div className="h-80 bg-gradient-to-br from-blue-100 via-green-50 to-emerald-100 flex items-center justify-center">
           {trip.imageUrl ? (
-            <img 
+            <Image 
               src={trip.imageUrl} 
               alt={trip.title}
               className="w-full h-full object-cover"
